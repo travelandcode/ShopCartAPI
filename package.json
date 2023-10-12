@@ -1,0 +1,19 @@
+{
+  "name": "shopcartapi",
+  "version": "1.0.0",
+  "description": "The ShopCart API serves as a vital component in your e-commerce application, enabling you to create and manage shopping carts for users. Beyond its core functionality, this API also integrates with OIDC for secure user authentication and authorization. This ensures that only authenticated and authorized users can interact with the shopping cart services.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "ts-node app.ts"
+  },
+  "author": "travelandcode",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "passport-google-oidc": "^0.1.0",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.2.2"
+  }
+}
