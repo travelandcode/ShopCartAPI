@@ -1,5 +1,5 @@
+import { port } from 'shopcart-api/config/config'
 import express from 'express'
-import { port } from './src/config/config'
 
 const app = express()
 const PORT = port
