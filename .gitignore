@@ -1,0 +1,9 @@
+#Ignore Node Modules
+/node_modules
+
+#Ignore Build Artifacts
+/build
+/dist
+
+#Ignore Configuration Files
+.env
