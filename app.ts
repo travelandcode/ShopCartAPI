@@ -1,5 +1,6 @@
-import { port } from 'shopcart-api/config/config'
+import { port } from './src/config/config'
 import express from 'express'
+import logger from './src/logs/logger'
 
 const app = express()
 const PORT = port
@@ -8,5 +9,5 @@ const PORT = port
 app.use(express.json())
 
 app.listen(PORT,() =>{
-    console.log(`Server is listening on port:${PORT}`)
+    logger.info(`Server is listening on port:${PORT}`);
 })
