@@ -1,4 +1,4 @@
-import { port } from 'shopcart-api/config/config'
+import { port } from './src/config/config'
 import express from 'express'
 
 const app = express()
