@@ -1,4 +1,5 @@
 import express from 'express'
+import logger from './src/logs/logger'
 import passport from 'passport'
 import Config from './src/config/config'
 import authRoutes from './src/routes/auth_routes'
@@ -37,5 +38,5 @@ app.use(passport.session())
 app.use(authRoutes)
 
 app.listen(PORT,() =>{
-    console.log(`Server is listening on port:${PORT}`)
+    logger.info(`Server is listening on port:${PORT}`);
 })
