@@ -1,4 +1,4 @@
-import express, { Router, json } from 'express'
+import express from 'express'
 import passport from 'passport'
 import Config from '../config/config'
 import {  User } from '../models/models'
