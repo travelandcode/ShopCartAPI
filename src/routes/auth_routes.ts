@@ -92,7 +92,6 @@ passport.use(new FacebookStrategy(
 
 //Configure Microsoft Strategy
 passport.use(new MicrosoftStrategy({
-    // Standard OAuth2 options
     clientID: config.MICROSOFT_CLIENT_ID,
     clientSecret: config.MICROSOFT_CLIENT_SECRET,
     callbackURL: config.MICROSOFT_CALLBACK_URL,
@@ -212,7 +211,6 @@ router.get(MICROSOFT_AUTH_SUCCESS, (req:any, res) => {
         res.send(NOT_AUTHENTICATED)
     }
 })
-
 
 //Send Login Information to Client
 router.get(AUTH_USER,(req,res) =>{

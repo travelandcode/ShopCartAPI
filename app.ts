@@ -10,7 +10,6 @@ const app = express()
 const session = require('express-session')
 const config = new Config()
 
-
 const PORT = config.PORT
 
 const allowedOrigins = 'http://localhost:3000/';
