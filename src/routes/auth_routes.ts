@@ -1,12 +1,13 @@
-import express, { Router } from 'express'
+import express, { Router, json } from 'express'
 import passport from 'passport'
 import Config from '../config/config'
 import {  User } from '../models/models'
 import { Strategy as TwitterStrategy } from 'passport-twitter'
 import { Strategy as FacebookStrategy } from 'passport-facebook'
-import { Strategy as InstagramStrategy } from 'passport-instagram'
-import { EMAIL, OPEN_ID, PROFILE, GOOGLE, GOOGLE_AUTH, GOOGLE_AUTH_REDIRECT, FAILURE, GOOGLE_AUTH_SUCCESS, TWITTER_AUTH, TWITTER, TWITTER_AUTH_REDIRECT, TWITTER_AUTH_SUCCESS, NOT_AUTHENTICATED, FACEBOOK_AUTH, FACEBOOK, FACEBOOK_AUTH_REDIRECT, FACEBOOK_AUTH_SUCCESS, AUTH_USER, INSTAGRAM_AUTH, INSTAGRAM, INSTAGRAM_AUTH_REDIRECT, INSTAGRAM_AUTH_SUCCESS } from '../constants/constants'
+import { Strategy as MicrosoftStrategy } from 'passport-microsoft'
+import { EMAIL, OPEN_ID, PROFILE, GOOGLE, GOOGLE_AUTH, GOOGLE_AUTH_REDIRECT, FAILURE, GOOGLE_AUTH_SUCCESS, TWITTER_AUTH, TWITTER, TWITTER_AUTH_REDIRECT, TWITTER_AUTH_SUCCESS, NOT_AUTHENTICATED, FACEBOOK_AUTH, FACEBOOK, FACEBOOK_AUTH_REDIRECT, FACEBOOK_AUTH_SUCCESS, AUTH_USER, MICROSOFT_AUTH, MICROSOFT, MICROSOFT_AUTH_REDIRECT, MICROSOFT_AUTH_SUCCESS } from '../constants/constants'
 import { UserType } from '../models/enums'
+import logger from '../logs/logger'
 
 
 const router = express.Router()
@@ -16,8 +17,8 @@ const config = new Config()
 const users: {[key:string]: User} = {}
 let activeUser: User = {
     displayName: '',
-    id: '',
-    type: UserType.GOOGLE
+    type: UserType.GOOGLE,
+    id: ''
 }
 
 //Configure Google Strategy
@@ -89,28 +90,32 @@ passport.use(new FacebookStrategy(
     }
 ))
 
-//Configure Instagram Strategy
-passport.use(new InstagramStrategy(
-    {
-        clientID: config.FACEBOOK_CLIENT_ID,
-        clientSecret: config.FACEBOOK_CLIENT_SECRET,
-        callbackURL: INSTAGRAM_AUTH_REDIRECT
-    },
-    (accessToken, refreshToken, profile, done) => {
-        if(users[profile.id]){
-            return done(null, users[profile.id])
-        }else{
-            let newUser = {
-                id: profile.id,
-                displayName: profile.displayName,
-                type: UserType.FACEBOOK
-            }
-            activeUser = newUser
-            users[profile.id] = newUser
-            return done(null, newUser)
+//Configure Microsoft Strategy
+passport.use(new MicrosoftStrategy({
+    // Standard OAuth2 options
+    clientID: config.MICROSOFT_CLIENT_ID,
+    clientSecret: config.MICROSOFT_CLIENT_SECRET,
+    callbackURL: config.MICROSOFT_CALLBACK_URL,
+    scope: ['user.read'],
+    authorizationURL: 'https://login.microsoftonline.com/6e4aab20-70ca-485b-8b19-ba77e89bd5e0/oauth2/v2.0/authorize',
+    tokenURL: 'https://login.microsoftonline.com/6e4aab20-70ca-485b-8b19-ba77e89bd5e0/oauth2/v2.0/token',
+  },
+  (accessToken:any, refreshToken:any, profile:any, done:any) => {
+    console.log(profile)
+    if(users[profile.id]){
+        return done(null, users[profile.id])
+    }else{
+        let newUser = {
+            id: profile.id,
+            displayName: profile.name.givenName,
+            type: UserType.MICROSOFT
         }
+        activeUser = newUser
+        users[profile.id] = newUser
+        return done(null, newUser)
     }
-))
+  }
+));
 
 //Passport Session Setup
 passport.serializeUser(function(user:any,done:any){
@@ -134,11 +139,13 @@ router.get(GOOGLE_AUTH_REDIRECT, passport.authenticate(GOOGLE,
 
 router.get(GOOGLE_AUTH_SUCCESS, (req:any,res) =>{
     if (req.isAuthenticated()) {
-      req.session.user = req.user as User
-      res.redirect('http://localhost:3000/')
+        logger.info('Google User has been authenticated')
+        req.session.user = req.user as User
+        res.redirect('http://localhost:3000/')
       
     } else {
-      res.send(NOT_AUTHENTICATED)
+        logger.warn('Google User was not authenticated')
+        res.send(NOT_AUTHENTICATED)
     }
 })
 
@@ -156,6 +163,7 @@ router.get(TWITTER_AUTH_REDIRECT,passport.authenticate(TWITTER,
 
 router.get(TWITTER_AUTH_SUCCESS, (req:any, res) => {
     if (req.isAuthenticated()) {
+        logger.info('Twitter User has been authenticated')
         req.session.user = req.user as User
         res.redirect('http://localhost:3000/')
       } else {
@@ -176,6 +184,7 @@ router.get(FACEBOOK_AUTH_REDIRECT,passport.authenticate(FACEBOOK,
 
 router.get(FACEBOOK_AUTH_SUCCESS, (req:any, res) => {
     if (req.isAuthenticated()) {
+        logger.info('Facebook User has been authenticated')
         req.session.user = req.user as User
         res.redirect('http://localhost:3000/')
     } else {
@@ -183,19 +192,20 @@ router.get(FACEBOOK_AUTH_SUCCESS, (req:any, res) => {
     }
 })
 
-//Routes for Facebook Authentication
-router.get(INSTAGRAM_AUTH, passport.authenticate(INSTAGRAM))
+//Routes for Microsoft Authentication
+router.get(MICROSOFT_AUTH, passport.authenticate(MICROSOFT))
 
-router.get(INSTAGRAM_AUTH_REDIRECT,passport.authenticate(INSTAGRAM,
+router.get(MICROSOFT_AUTH_REDIRECT,passport.authenticate(MICROSOFT,
         {
             failureRedirect: FAILURE,
-            successRedirect: INSTAGRAM_AUTH_SUCCESS
+            successRedirect: MICROSOFT_AUTH_SUCCESS
         }
     )
 )
 
-router.get(INSTAGRAM_AUTH_SUCCESS, (req:any, res) => {
+router.get(MICROSOFT_AUTH_SUCCESS, (req:any, res) => {
     if (req.isAuthenticated()) {
+        logger.info('Microsoft User has been authenticated')
         req.session.user = req.user as User
         res.redirect('http://localhost:3000/')
     } else {
@@ -203,13 +213,16 @@ router.get(INSTAGRAM_AUTH_SUCCESS, (req:any, res) => {
     }
 })
 
+
 //Send Login Information to Client
 router.get(AUTH_USER,(req,res) =>{
-    res.send(activeUser)
+    logger.info('Sending Active User Information to Login')
+    activeUser.displayName === '' ? res.send(null) : res.json(activeUser)
 })
 
 router.get(FAILURE, (req,res) =>{
-    res.send('Failed to Login')
+    logger.info('Login attempt failed')
+    res.redirect('http://localhost:3000/')
 })
 
 export default router

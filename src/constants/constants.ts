@@ -30,13 +30,13 @@ export const FACEBOOK_AUTH_SUCCESS = '/auth/facebook/success'
 
 export const FACEBOOK = 'facebook'
 
-export const INSTAGRAM_AUTH = '/auth/instagram'
+export const MICROSOFT_AUTH = '/auth/microsoft'
 
-export const INSTAGRAM_AUTH_REDIRECT = '/auth/instagram/redirect'
+export const MICROSOFT_AUTH_REDIRECT = '/auth/microsoft/redirect'
 
-export const INSTAGRAM_AUTH_SUCCESS = '/auth/instagram/success'
+export const MICROSOFT_AUTH_SUCCESS = '/auth/microsoft/success'
 
-export const INSTAGRAM = 'instagram'
+export const MICROSOFT = 'microsoft'
 
 export const SECRET = 'abc123'
 

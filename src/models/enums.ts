@@ -1,5 +1,6 @@
 export enum UserType {
     GOOGLE = 'GOOGLE',
     TWITTER = 'TWITTER',
-    FACEBOOK = 'FACEBOOK'
+    FACEBOOK = 'FACEBOOK',
+    MICROSOFT = 'MICROSOFT'
 }
