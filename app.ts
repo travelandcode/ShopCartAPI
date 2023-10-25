@@ -3,7 +3,7 @@ import logger from './src/logs/logger'
 import passport from 'passport'
 import Config from './src/config/config'
 import authRoutes from './src/routes/auth_routes'
-import { SECRET } from './src/constants/constants'
+import { DOMAIN, SECRET } from './src/constants/constants'
 import cors from 'cors'
 
 const app = express()
@@ -12,7 +12,7 @@ const config = new Config()
 
 const PORT = config.PORT
 
-const allowedOrigins = 'http://localhost:3000/';
+const allowedOrigins = ['http://localhost:3000/', DOMAIN];
 
 app.use(cors({
     origin: function (origin:any, callback) {

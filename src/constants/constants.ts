@@ -1,3 +1,5 @@
+import e from "express"
+
 export const PROFILE = 'profile'
 
 export const EMAIL = 'email'
@@ -43,5 +45,7 @@ export const SECRET = 'abc123'
 export const NOT_AUTHENTICATED = 'Not Authenticated'
 
 export const  AUTH_USER = '/auth/user'
+
+export const DOMAIN = 'https://theshopcart.vercel.app'
 
 

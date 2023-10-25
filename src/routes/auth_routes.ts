@@ -5,7 +5,7 @@ import {  User } from '../models/models'
 import { Strategy as TwitterStrategy } from 'passport-twitter'
 import { Strategy as FacebookStrategy } from 'passport-facebook'
 import { Strategy as MicrosoftStrategy } from 'passport-microsoft'
-import { EMAIL, OPEN_ID, PROFILE, GOOGLE, GOOGLE_AUTH, GOOGLE_AUTH_REDIRECT, FAILURE, GOOGLE_AUTH_SUCCESS, TWITTER_AUTH, TWITTER, TWITTER_AUTH_REDIRECT, TWITTER_AUTH_SUCCESS, NOT_AUTHENTICATED, FACEBOOK_AUTH, FACEBOOK, FACEBOOK_AUTH_REDIRECT, FACEBOOK_AUTH_SUCCESS, AUTH_USER, MICROSOFT_AUTH, MICROSOFT, MICROSOFT_AUTH_REDIRECT, MICROSOFT_AUTH_SUCCESS } from '../constants/constants'
+import { EMAIL, OPEN_ID, PROFILE, GOOGLE, GOOGLE_AUTH, GOOGLE_AUTH_REDIRECT, FAILURE, GOOGLE_AUTH_SUCCESS, TWITTER_AUTH, TWITTER, TWITTER_AUTH_REDIRECT, TWITTER_AUTH_SUCCESS, NOT_AUTHENTICATED, FACEBOOK_AUTH, FACEBOOK, FACEBOOK_AUTH_REDIRECT, FACEBOOK_AUTH_SUCCESS, AUTH_USER, MICROSOFT_AUTH, MICROSOFT, MICROSOFT_AUTH_REDIRECT, MICROSOFT_AUTH_SUCCESS, DOMAIN } from '../constants/constants'
 import { UserType } from '../models/enums'
 import logger from '../logs/logger'
 
@@ -140,7 +140,7 @@ router.get(GOOGLE_AUTH_SUCCESS, (req:any,res) =>{
     if (req.isAuthenticated()) {
         logger.info('Google User has been authenticated')
         req.session.user = req.user as User
-        res.redirect('http://localhost:3000/')
+        res.redirect(DOMAIN)
       
     } else {
         logger.warn('Google User was not authenticated')
@@ -164,7 +164,7 @@ router.get(TWITTER_AUTH_SUCCESS, (req:any, res) => {
     if (req.isAuthenticated()) {
         logger.info('Twitter User has been authenticated')
         req.session.user = req.user as User
-        res.redirect('http://localhost:3000/')
+        res.redirect(DOMAIN)
       } else {
         res.send(NOT_AUTHENTICATED)
       }
@@ -185,7 +185,7 @@ router.get(FACEBOOK_AUTH_SUCCESS, (req:any, res) => {
     if (req.isAuthenticated()) {
         logger.info('Facebook User has been authenticated')
         req.session.user = req.user as User
-        res.redirect('http://localhost:3000/')
+        res.redirect(DOMAIN)
     } else {
         res.send(NOT_AUTHENTICATED)
     }
@@ -206,7 +206,7 @@ router.get(MICROSOFT_AUTH_SUCCESS, (req:any, res) => {
     if (req.isAuthenticated()) {
         logger.info('Microsoft User has been authenticated')
         req.session.user = req.user as User
-        res.redirect('http://localhost:3000/')
+        res.redirect(DOMAIN)
     } else {
         res.send(NOT_AUTHENTICATED)
     }
@@ -220,7 +220,7 @@ router.get(AUTH_USER,(req,res) =>{
 
 router.get(FAILURE, (req,res) =>{
     logger.info('Login attempt failed')
-    res.redirect('http://localhost:3000/')
+    res.redirect(DOMAIN)
 })
 
 export default router
