@@ -16,4 +16,5 @@ export default class Config{
     MICROSOFT_CLIENT_ID = process.env.MICROSOFT_CLIENT_ID || ''
     MICROSOFT_CLIENT_SECRET = process.env.MICROSOFT_CLIENT_SECRET || ''
     MICROSOFT_CALLBACK_URL = process.env.MICROSOFT_CALLBACK_URL || ''
+    DOMAIN = process.env.DOMAIN || ''
 }

@@ -1,4 +1,5 @@
 import e from "express"
+import { User } from "shopcart-api/models/models"
 
 export const PROFILE = 'profile'
 
@@ -7,6 +8,8 @@ export const EMAIL = 'email'
 export const OPEN_ID = 'openid'
 
 export const FAILURE = '/failure'
+
+export const LOGOUT = '/logout'
 
 export const GOOGLE_AUTH = '/auth/google'
 
@@ -46,6 +49,7 @@ export const NOT_AUTHENTICATED = 'Not Authenticated'
 
 export const  AUTH_USER = '/auth/user'
 
-export const DOMAIN = 'https://theshopcart.vercel.app'
+
+export const EMPTY_USER = { displayName: '', type: '', id: '', email: '' }
 
 

@@ -1,11 +1,11 @@
-import express from 'express'
+import express, { json } from 'express'
 import passport from 'passport'
 import Config from '../config/config'
 import {  User } from '../models/models'
 import { Strategy as TwitterStrategy } from 'passport-twitter'
 import { Strategy as FacebookStrategy } from 'passport-facebook'
 import { Strategy as MicrosoftStrategy } from 'passport-microsoft'
-import { EMAIL, OPEN_ID, PROFILE, GOOGLE, GOOGLE_AUTH, GOOGLE_AUTH_REDIRECT, FAILURE, GOOGLE_AUTH_SUCCESS, TWITTER_AUTH, TWITTER, TWITTER_AUTH_REDIRECT, TWITTER_AUTH_SUCCESS, NOT_AUTHENTICATED, FACEBOOK_AUTH, FACEBOOK, FACEBOOK_AUTH_REDIRECT, FACEBOOK_AUTH_SUCCESS, AUTH_USER, MICROSOFT_AUTH, MICROSOFT, MICROSOFT_AUTH_REDIRECT, MICROSOFT_AUTH_SUCCESS, DOMAIN } from '../constants/constants'
+import { EMAIL, OPEN_ID, PROFILE, GOOGLE, GOOGLE_AUTH, GOOGLE_AUTH_REDIRECT, FAILURE, GOOGLE_AUTH_SUCCESS, TWITTER_AUTH, TWITTER, TWITTER_AUTH_REDIRECT, TWITTER_AUTH_SUCCESS, NOT_AUTHENTICATED, FACEBOOK_AUTH, FACEBOOK, FACEBOOK_AUTH_REDIRECT, FACEBOOK_AUTH_SUCCESS, AUTH_USER, MICROSOFT_AUTH, MICROSOFT, MICROSOFT_AUTH_REDIRECT, MICROSOFT_AUTH_SUCCESS, LOGOUT, EMPTY_USER } from '../constants/constants'
 import { UserType } from '../models/enums'
 import logger from '../logs/logger'
 
@@ -15,12 +15,7 @@ const GoogleStategy = require('passport-google-oidc')
 const config = new Config()
 
 const users: {[key:string]: User} = {}
-let activeUser: User = {
-    displayName: '',
-    type: UserType.GOOGLE,
-    id: ''
-}
-
+let activeUser: User = EMPTY_USER
 //Configure Google Strategy
 passport.use(new GoogleStategy(
     {
@@ -35,7 +30,8 @@ passport.use(new GoogleStategy(
             let newUser: User = {
                 id: profile.id,
                 displayName: profile.name.givenName,
-                type: UserType.GOOGLE
+                type: UserType.GOOGLE,
+                email: profile.emails[0].value
             }
             activeUser = newUser
             users[profile.id] = newUser
@@ -52,13 +48,15 @@ passport.use(new TwitterStrategy(
         callbackURL: config.TWITTER_CALLBACK_URL
     },
     (token:any, tokenSecret:any, profile:any, done:any) =>{
+        
         if(users[profile.id]){
             return done(null, users[profile.id])
         }else{
-            let newUser = {
+            let newUser: User = {
                 id: profile.id,
                 displayName: profile.displayName,
-                type: UserType.TWITTER
+                type: UserType.TWITTER,
+                email: 'defaultemail@gmail.com'
             }
             activeUser = newUser
             users[profile.id] = newUser
@@ -81,7 +79,8 @@ passport.use(new FacebookStrategy(
             let newUser = {
                 id: profile.id,
                 displayName: profile.displayName,
-                type: UserType.FACEBOOK
+                type: UserType.FACEBOOK,
+                email: 'defaultemail@gmail.com'
             }
             activeUser = newUser
             users[profile.id] = newUser
@@ -100,14 +99,18 @@ passport.use(new MicrosoftStrategy({
     tokenURL: 'https://login.microsoftonline.com/6e4aab20-70ca-485b-8b19-ba77e89bd5e0/oauth2/v2.0/token',
   },
   (accessToken:any, refreshToken:any, profile:any, done:any) => {
-    console.log(profile)
+    logger.info(JSON.stringify(profile))
     if(users[profile.id]){
         return done(null, users[profile.id])
     }else{
+        const email = () =>{
+            profile.emails[0].value
+        }
         let newUser = {
             id: profile.id,
             displayName: profile.name.givenName,
-            type: UserType.MICROSOFT
+            type: UserType.MICROSOFT,
+            email: 'defaultemail@gmail.com'
         }
         activeUser = newUser
         users[profile.id] = newUser
@@ -118,7 +121,7 @@ passport.use(new MicrosoftStrategy({
 
 //Passport Session Setup
 passport.serializeUser(function(user:any,done:any){
-    done(null, user.id)
+    done(null, user)
 })
 
 passport.deserializeUser(function(user:any,done:any){
@@ -140,7 +143,7 @@ router.get(GOOGLE_AUTH_SUCCESS, (req:any,res) =>{
     if (req.isAuthenticated()) {
         logger.info('Google User has been authenticated')
         req.session.user = req.user as User
-        res.redirect(DOMAIN)
+        res.redirect('http://localhost:3000/')
       
     } else {
         logger.warn('Google User was not authenticated')
@@ -164,7 +167,7 @@ router.get(TWITTER_AUTH_SUCCESS, (req:any, res) => {
     if (req.isAuthenticated()) {
         logger.info('Twitter User has been authenticated')
         req.session.user = req.user as User
-        res.redirect(DOMAIN)
+        res.redirect(config.DOMAIN)
       } else {
         res.send(NOT_AUTHENTICATED)
       }
@@ -185,7 +188,7 @@ router.get(FACEBOOK_AUTH_SUCCESS, (req:any, res) => {
     if (req.isAuthenticated()) {
         logger.info('Facebook User has been authenticated')
         req.session.user = req.user as User
-        res.redirect(DOMAIN)
+        res.redirect(config.DOMAIN)
     } else {
         res.send(NOT_AUTHENTICATED)
     }
@@ -206,7 +209,7 @@ router.get(MICROSOFT_AUTH_SUCCESS, (req:any, res) => {
     if (req.isAuthenticated()) {
         logger.info('Microsoft User has been authenticated')
         req.session.user = req.user as User
-        res.redirect(DOMAIN)
+        res.redirect('http://localhost:3000/')
     } else {
         res.send(NOT_AUTHENTICATED)
     }
@@ -215,12 +218,22 @@ router.get(MICROSOFT_AUTH_SUCCESS, (req:any, res) => {
 //Send Login Information to Client
 router.get(AUTH_USER,(req,res) =>{
     logger.info('Sending Active User Information to Login')
+    logger.info(JSON.stringify(activeUser))
     activeUser.displayName === '' ? res.send(null) : res.json(activeUser)
 })
 
 router.get(FAILURE, (req,res) =>{
     logger.info('Login attempt failed')
-    res.redirect(DOMAIN)
+    res.redirect(config.DOMAIN)
+})
+
+router.post(LOGOUT, (req,res) =>{
+    logger.info('Logging out user')
+    req.logout(() => {
+        activeUser = EMPTY_USER
+        res.redirect(config.DOMAIN)
+        }
+    );
 })
 
 export default router
