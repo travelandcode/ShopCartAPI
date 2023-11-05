@@ -4,6 +4,7 @@
 #Ignore Build Artifacts
 /build
 /dist
+/api
 
 #Ignore Configuration Files
 .env
