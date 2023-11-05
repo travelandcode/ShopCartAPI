@@ -1,6 +1,3 @@
-import e from "express"
-import { User } from "shopcart-api/models/models"
-
 export const PROFILE = 'profile'
 
 export const EMAIL = 'email'
