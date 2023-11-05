@@ -1,9 +1,9 @@
 import express from 'express'
-import logger from './logs/logger'
+import logger from './src/logs/logger'
 import passport from 'passport'
-import Config from './config/config'
-import authRoutes from './routes/auth_routes'
-import { SECRET } from './constants/constants'
+import Config from './src/config/config'
+import authRoutes from './src/routes/auth_routes'
+import { SECRET } from './src/constants/constants'
 import cors from 'cors'
 
 const app = express()
