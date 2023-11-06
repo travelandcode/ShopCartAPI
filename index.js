@@ -1,10 +1,11 @@
-import express from 'express'
-import logger from './src/logs/logger'
-import passport from 'passport'
-import Config from './src/config/config'
-import authRoutes from './src/routes/auth_routes'
-import { SECRET } from './src/constants/constants'
-import cors from 'cors'
+const express = require('express')
+const passport = require('passport')
+const cors = require('cors')
+
+const logger = require('./src/log/logger')
+const Config = require('./src/config/config')
+const authRoutes = require('./src/routes/auth_routes')
+const { SECRET } = require('./src/constants/constants')
 
 const app = express()
 const session = require('express-session')
