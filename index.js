@@ -4,6 +4,7 @@ import { SECRET } from './src/constants/constants'
 import cors from 'cors'
 import logger from './src/logs/logger'
 import passport from 'passport'
+import express from 'express'
 
 const app = express()
 const session = require('express-session')
