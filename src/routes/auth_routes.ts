@@ -142,7 +142,7 @@ router.get(GOOGLE_AUTH_REDIRECT, passport.authenticate(GOOGLE,
 router.get(GOOGLE_AUTH_SUCCESS, (req:any,res) =>{
     if (req.isAuthenticated()) {
         logger.info('Google User has been authenticated')
-        req.session.user = req.user as User
+        activeUser = req.user as User
         res.redirect('http://localhost:3000/')
       
     } else {
