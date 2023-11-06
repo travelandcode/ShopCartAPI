@@ -33,7 +33,6 @@ passport.use(new GoogleStategy(
                 type: UserType.GOOGLE,
                 email: profile.emails[0].value
             }
-            activeUser = newUser
             users[profile.id] = newUser
             return done(null, newUser)
         }
@@ -58,7 +57,6 @@ passport.use(new TwitterStrategy(
                 type: UserType.TWITTER,
                 email: 'defaultemail@gmail.com'
             }
-            activeUser = newUser
             users[profile.id] = newUser
             return done(null, newUser)
         }
@@ -82,7 +80,6 @@ passport.use(new FacebookStrategy(
                 type: UserType.FACEBOOK,
                 email: 'defaultemail@gmail.com'
             }
-            activeUser = newUser
             users[profile.id] = newUser
             return done(null, newUser)
         }
@@ -112,7 +109,7 @@ passport.use(new MicrosoftStrategy({
             type: UserType.MICROSOFT,
             email: 'defaultemail@gmail.com'
         }
-        activeUser = newUser
+        
         users[profile.id] = newUser
         return done(null, newUser)
     }
@@ -166,7 +163,7 @@ router.get(TWITTER_AUTH_REDIRECT,passport.authenticate(TWITTER,
 router.get(TWITTER_AUTH_SUCCESS, (req:any, res) => {
     if (req.isAuthenticated()) {
         logger.info('Twitter User has been authenticated')
-        req.session.user = req.user as User
+        activeUser = req.user as User
         res.redirect(config.DOMAIN)
       } else {
         res.send(NOT_AUTHENTICATED)
@@ -187,7 +184,7 @@ router.get(FACEBOOK_AUTH_REDIRECT,passport.authenticate(FACEBOOK,
 router.get(FACEBOOK_AUTH_SUCCESS, (req:any, res) => {
     if (req.isAuthenticated()) {
         logger.info('Facebook User has been authenticated')
-        req.session.user = req.user as User
+        activeUser = req.user as User
         res.redirect(config.DOMAIN)
     } else {
         res.send(NOT_AUTHENTICATED)
@@ -208,7 +205,7 @@ router.get(MICROSOFT_AUTH_REDIRECT,passport.authenticate(MICROSOFT,
 router.get(MICROSOFT_AUTH_SUCCESS, (req:any, res) => {
     if (req.isAuthenticated()) {
         logger.info('Microsoft User has been authenticated')
-        req.session.user = req.user as User
+        activeUser = req.user as User
         res.redirect('http://localhost:3000/')
     } else {
         res.send(NOT_AUTHENTICATED)
