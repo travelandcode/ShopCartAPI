@@ -1,7 +1,7 @@
 import express, { json } from 'express'
 import passport from 'passport'
 import Config from '../config/config'
-import {  User } from '../models/models'
+import {  User } from '../models/d'
 import { Strategy as TwitterStrategy } from 'passport-twitter'
 import { Strategy as FacebookStrategy } from 'passport-facebook'
 import { Strategy as MicrosoftStrategy } from 'passport-microsoft'
@@ -27,6 +27,7 @@ passport.use(new GoogleStategy(
         if(users[profile.id]){
             return done(null, users[profile.id])
         }else{
+            console.log(profile)
             let newUser: User = {
                 id: profile.id,
                 displayName: profile.name.givenName,
