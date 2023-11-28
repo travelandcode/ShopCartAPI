@@ -4,6 +4,8 @@ export const EMAIL = 'email'
 
 export const OPEN_ID = 'openid'
 
+export const EMPTY_PATH = '/'
+
 export const FAILURE = '/failure'
 
 export const LOGOUT = '/logout'
