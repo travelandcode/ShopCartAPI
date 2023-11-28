@@ -1,5 +1,6 @@
-import Config from './src/config/config'
+import Config, { connectDB } from './src/config/config'
 import authRoutes from './src/routes/auth_routes'
+import productRoutes from './src/routes/product_routes'
 import { SECRET } from './src/constants/constants'
 import cors from 'cors'
 import logger from './src/logs/logger'
@@ -14,8 +15,10 @@ const PORT = config.PORT
 
 const allowedOrigins = config.DOMAIN;
 
+connectDB();
+
 app.use(cors({
-    origin: function (origin, callback) {
+    origin: function (origin:any, callback) {
       if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
         callback(null, true);
       } else {
@@ -35,6 +38,7 @@ app.use(passport.session())
 
 //Routes
 app.use(authRoutes)
+app.use('/products',productRoutes)
 
 app.listen(PORT,() =>{
     logger.info(`Server is listening on port:${PORT}`);
