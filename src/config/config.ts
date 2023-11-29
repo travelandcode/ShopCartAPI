@@ -20,6 +20,7 @@ export default class Config{
     MICROSOFT_CALLBACK_URL = process.env.MICROSOFT_CALLBACK_URL || ''
     DOMAIN = process.env.DOMAIN || ''
     MONGODB_URI = process.env.MONGODB_URI || ''
+    STRIPE_API_KEY = process.env.STRIPE_API_KEY || ''
 }
 
 export function connectDB():void {
