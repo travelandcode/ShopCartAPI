@@ -10,7 +10,7 @@ export interface User{
 export interface Products{
     id: number,
     name: string,
-    description: string,
+    description: string[],
     price: number,
     tags: string[],
     img_src: string,

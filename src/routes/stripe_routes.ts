@@ -26,16 +26,16 @@ router.post(EMPTY_PATH,async (req:any,res)  =>{
               price_data: {
                 currency: "usd",
                 product_data: {
-                  name: storeItem?.name,
-                  images: [storeItem?.img_src]
+                  name: storeItem!.name,
+                  images: [storeItem!.img_src[0]]
                 },
                 unit_amount: storeItem!.price * 100,
               },
               quantity: product.quantity,
             }
           }),
-          success_url: `${req.headers.origin}/success?session={CHECKOUT_SESSION_ID}`,
-          cancel_url: 'http://localhost:3000/cancel',
+          success_url: `${req.headers.origin}?/session={CHECKOUT_SESSION_ID}`,
+          cancel_url: 'http://localhost:3000/',
     
         })
         res.json({session:session.id})

@@ -9,7 +9,7 @@ const ProductSchema = new Schema<Products>({
     description: String,
     price: Number,
     tags: [String],
-    img_src: String,
+    img_src: [String],
     isDeal: Boolean
 
 },{collection: 'products'});
