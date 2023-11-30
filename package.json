@@ -2,7 +2,7 @@
   "name": "shopcartapi",
   "version": "1.0.0",
   "description": "The ShopCart API serves as a vital component in your e-commerce application, enabling you to create and manage shopping carts for users. Beyond its core functionality, this API also integrates with OIDC for secure user authentication and authorization. This ensures that only authenticated and authorized users can interact with the shopping cart services.",
-  "main": "index.js",
+  "main": "app.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "ts-node app.ts",
