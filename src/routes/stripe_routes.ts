@@ -34,7 +34,7 @@ router.post(EMPTY_PATH,async (req:any,res)  =>{
               quantity: product.quantity,
             }
           }),
-          success_url: `${req.headers.origin}?/session={CHECKOUT_SESSION_ID}`,
+          success_url: `${req.headers.origin}/success?session={CHECKOUT_SESSION_ID}`,
           cancel_url: 'http://localhost:3000/',
     
         })

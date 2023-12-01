@@ -13,6 +13,7 @@ const session = require('express-session')
 const config = new Config()
 
 const PORT = config.PORT
+const DOMAIN = config.DOMAIN
 
 connectDB();
 
@@ -20,7 +21,7 @@ app.use(cors())
 
 app.use(function (req, res, next) {
   // Website you wish to allow to connect
-  res.setHeader("Access-Control-Allow-Origin", ["http://localhost:3000"]);
+  res.setHeader("Access-Control-Allow-Origin", DOMAIN);
 
   // Request methods you wish to allow
   res.setHeader(
