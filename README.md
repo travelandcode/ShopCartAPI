@@ -1,6 +1,6 @@
 # ShopCart API
 
-The ShopCart API serves as a vital component in your e-commerce application, enabling you to create and manage shopping carts for users. Beyond its core functionality, this API also integrates with OIDC for secure user authentication and authorization. This ensures that only authenticated and authorized users can interact with the shopping cart services.
+Welcome to the ShopCart API documentation! This comprehensive guide empowers you to seamlessly integrate shopping cart functionality into your e-commerce application.
 
 ## Getting Started
 
@@ -24,7 +24,45 @@ To use the ShopCart API, follow these simple steps:
     npm install
     ```
 
-4. **Run the API:** Start the ShopCart API by running the following command.
+4. **Create the .env file:** Create a `.env` file in the root of the project with the following content:
+
+    ```plaintext
+    # .env file
+
+    # Google Credentials
+    GOOGLE_CLIENT_ID = your_google_client_id
+    GOOGLE_CLIENT_SECRET = your_google_client_secret
+    GOOGLE_CALLBACK_URL = your_google_callback_url
+
+    # Twitter Credentials
+    TWITTER_CONSUMER_KEY = your_twitter_consumer_key
+    TWITTER_CONSUMER_SECRET = your_twitter_consumer_secret
+    TWITTER_CALLBACK_URL = your_twitter_callback_url
+    
+    #Facebook Credentials
+    FACEBOOK_CLIENT_ID = your_facebook_client_id
+    FACEBOOK_CLIENT_SECRET = your_facebook_client_secret
+    FACEBOOK_CALLBACK_URL = your_facebook_callback_url
+    
+    #Microsoft Credentials
+    MICROSOFT_CLIENT_ID = your_microsoft_client_id
+    MICROSOFT_CLIENT_SECRET = your_microsoft_client_secret
+    MICROSOFT_CALLBACK_URL = yoour_microsoft_callback_url
+
+    #MONGODB
+    MONGODB_URI = your_mongodb_connection_string
+
+    #STRIPE
+    STRIPE_API_KEY = your_stripe_secret_key
+    
+    # Other configurations
+    PORT= your_port_number
+    DOMAIN= your_domain
+    ```
+
+   Make sure to replace the placeholder values (`your_database_connection_string`, `your_oidc_issuer`, `your_oidc_client_id`, `your_oidc_client_secret`) with your actual configuration values.
+
+5. **Run the API:** Start the ShopCart API by running the following command.
 
     ```bash
     npm run start
@@ -49,3 +87,4 @@ Here's an example using cURL:
 
 ```bash
 curl -X POST -H "Content-Type: application/json" -d '{"productId": 123, "quantity": 2}' http://localhost:3000/cart/user123/addItem
+
