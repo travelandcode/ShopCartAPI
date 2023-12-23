@@ -1,13 +1,4 @@
-import { UserType } from "./enums"
-
-export interface User{
-    type: UserType | string
-    id: string
-    displayName: string
-    email: string
-}
-
-export interface Products{
+export interface Product{
     id: number,
     name: string,
     description: string[],
@@ -15,4 +6,19 @@ export interface Products{
     tags: string[],
     img_src: string,
     isDeal: boolean
+}
+
+export interface User{
+    id: string,
+    name: string,
+    password: string,
+    email: string,
+    isEmailVerified: boolean
+}
+
+export interface Token{
+    userId: string,
+    token: string,
+    createdAt: string,
+    expiresAt: string
 }
