@@ -97,7 +97,7 @@ router.post(SIGN_UP, async (req,res) => {
         user.save().then(user => logger.info(user));
         const { formattedCurrentDay, formattedNextDay } = getFormattedDates()
         const generatedToken = generateToken()
-        const userTokenInfo = new tokens({
+        const userTokenInfo = new tokens({ //tokens for email verification
             userId: user.id,
             token: generatedToken,
             createdAt: formattedCurrentDay,
