@@ -1,7 +1,7 @@
 import express from 'express'
 import logger from '../logs/logger'
 import ProductsModel from '../models/products'
-import { Products } from '../models/d'
+import { Product } from '../models/d'
 import { EMPTY_PATH } from '../constants/constants'
 import Config from '../config/config'
 import { getProducts } from '../controllers/product_controller'
@@ -12,7 +12,7 @@ const stripe = require("stripe")(config.STRIPE_API_KEY)
 
 router.post(EMPTY_PATH,async (req:any,res)  =>{
     try {
-        const products = await getProducts() as Products[]
+        const products = await getProducts() as Product[]
         const cartProducts = req.body.cartProducts
         const session = await stripe.checkout.sessions.create({
           payment_method_types: ["card"],
