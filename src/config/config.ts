@@ -21,6 +21,7 @@ export default class Config{
     DOMAIN = process.env.DOMAIN || ''
     MONGODB_URI = process.env.MONGODB_URI || ''
     STRIPE_API_KEY = process.env.STRIPE_API_KEY || ''
+    SESSION_SECRET = process.env.SESSION_SECRET || ''
 }
 
 export function connectDB():void {
