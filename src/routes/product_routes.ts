@@ -1,7 +1,7 @@
-import express from 'express'
+import express, { Request } from 'express'
 import logger from '../logs/logger'
 import { EMPTY_PATH } from '../constants/constants'
-import { getProducts } from '../controllers/product_controller'
+import { getProduct, getProducts } from '../controllers/product_controller'
 
 
 const router = express.Router()
@@ -12,6 +12,18 @@ router.get(EMPTY_PATH,async (req:any,res)  =>{
         logger.info('Sending Products Information')
         res.json(products)
     }catch(error){
+        logger.error(error)
+    }
+})
+
+router.get("/:id", async (req:Request,res:any) => {
+    try {
+        const productId = req.params.id
+        logger.info(productId)
+        const product = await getProduct(productId)
+        logger.info(product)
+        res.send(product)
+    } catch (error) {
         logger.error(error)
     }
 })
