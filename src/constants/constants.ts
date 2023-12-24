@@ -10,44 +10,51 @@ export const FAILURE = '/failure'
 
 export const LOGOUT = '/logout'
 
-export const GOOGLE_AUTH = '/auth/google'
+export const GOOGLE_AUTH = '/google'
 
-export const GOOGLE_AUTH_REDIRECT = '/auth/google/redirect'
+export const GOOGLE_AUTH_REDIRECT = '/google/redirect'
 
-export const GOOGLE_AUTH_SUCCESS = '/auth/google/success'
+export const GOOGLE_AUTH_SUCCESS = '/google/success'
 
 export const GOOGLE = 'google'
 
-export const TWITTER_AUTH = '/auth/twitter'
+export const TWITTER_AUTH = '/twitter'
 
-export const TWITTER_AUTH_REDIRECT = '/auth/twitter/redirect'
+export const TWITTER_AUTH_REDIRECT = '/twitter/redirect'
 
-export const TWITTER_AUTH_SUCCESS = '/auth/twitter/success'
+export const TWITTER_AUTH_SUCCESS = '/twitter/success'
 
 export const TWITTER = 'twitter'
 
-export const FACEBOOK_AUTH = '/auth/facebook'
+export const FACEBOOK_AUTH = '/facebook'
 
-export const FACEBOOK_AUTH_REDIRECT = '/auth/facebook/redirect'
+export const FACEBOOK_AUTH_REDIRECT = '/facebook/redirect'
 
-export const FACEBOOK_AUTH_SUCCESS = '/auth/facebook/success'
+export const FACEBOOK_AUTH_SUCCESS = '/facebook/success'
 
 export const FACEBOOK = 'facebook'
 
-export const MICROSOFT_AUTH = '/auth/microsoft'
+export const MICROSOFT_AUTH = '/microsoft'
 
-export const MICROSOFT_AUTH_REDIRECT = '/auth/microsoft/redirect'
+export const MICROSOFT_AUTH_REDIRECT = '/microsoft/redirect'
 
-export const MICROSOFT_AUTH_SUCCESS = '/auth/microsoft/success'
+export const MICROSOFT_AUTH_SUCCESS = '/microsoft/success'
 
 export const MICROSOFT = 'microsoft'
 
-export const SECRET = 'abc123'
-
 export const NOT_AUTHENTICATED = 'Not Authenticated'
 
-export const  AUTH_USER = '/auth/user'
+export const  AUTH_USER = '/user'
 
+export const AUTH = '/auth'
+
+export const SIGN_UP ='/signup'
+
+export const LOGIN = '/login'
+
+export const PRODUCTS = '/products'
+
+export const CHECKOUT = '/checkout'
 
 export const EMPTY_USER = { displayName: '', type: '', id: '', email: '' }
 
