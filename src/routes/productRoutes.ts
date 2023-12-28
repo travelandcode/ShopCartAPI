@@ -2,7 +2,6 @@ import express, { Request, Response } from 'express'
 import logger from '../logs/logger'
 import { ProductService } from '../controllers/productService'
 import { Product } from '../models/d'
-import products from '../models/products'
 
 const productService = new ProductService()
 const router = express.Router()
