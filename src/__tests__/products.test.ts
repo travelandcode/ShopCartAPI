@@ -1,6 +1,7 @@
 import { ProductService } from '../controllers/productService';
 import app from '../../app' 
 import { Product } from '../models/d';
+import ProductsModel from '../models/products'
 
 describe('Products Service', () =>{
 
@@ -34,7 +35,8 @@ describe('Products Service', () =>{
 
     test('should get all products',async () => {
        const products = await productService.getAllProducts()
-       expect(products.length).toBe(24)
+       const count = await ProductsModel.countDocuments({})
+       expect(products.length).toBe(count)
     })
 
     test('should add new product',async () => {
