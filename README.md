@@ -34,21 +34,6 @@ To use the ShopCart API, follow these simple steps:
     GOOGLE_CLIENT_SECRET = your_google_client_secret
     GOOGLE_CALLBACK_URL = your_google_callback_url
 
-    # Twitter Credentials
-    TWITTER_CONSUMER_KEY = your_twitter_consumer_key
-    TWITTER_CONSUMER_SECRET = your_twitter_consumer_secret
-    TWITTER_CALLBACK_URL = your_twitter_callback_url
-    
-    #Facebook Credentials
-    FACEBOOK_CLIENT_ID = your_facebook_client_id
-    FACEBOOK_CLIENT_SECRET = your_facebook_client_secret
-    FACEBOOK_CALLBACK_URL = your_facebook_callback_url
-    
-    #Microsoft Credentials
-    MICROSOFT_CLIENT_ID = your_microsoft_client_id
-    MICROSOFT_CLIENT_SECRET = your_microsoft_client_secret
-    MICROSOFT_CALLBACK_URL = yoour_microsoft_callback_url
-
     #MONGODB
     MONGODB_URI = your_mongodb_connection_string
 
@@ -56,11 +41,12 @@ To use the ShopCart API, follow these simple steps:
     STRIPE_API_KEY = your_stripe_secret_key
     
     # Other configurations
-    PORT= your_port_number
-    DOMAIN= your_domain
+    PORT = your_port_number
+    DOMAIN = your_domain
+    SESSION_SECRET = your_session_secret
     ```
 
-   Make sure to replace the placeholder values (`your_database_connection_string`, `your_oidc_issuer`, `your_oidc_client_id`, `your_oidc_client_secret`) with your actual configuration values.
+   Make sure to replace the placeholder values (`your_mongodb_connection_string`, `your_google_client_id`, `your_google_client_secret`, `your_google_callback_url`, etc...) with your actual configuration values.
 
 5. **Run the API:** Start the ShopCart API by running the following command.
 
