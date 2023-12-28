@@ -4,15 +4,16 @@ import ProductsModel from '../models/products'
 import { Product } from '../models/d'
 import { EMPTY_PATH } from '../constants/constants'
 import Config from '../config/config'
-import { getProducts } from '../controllers/product_controller'
+import { ProductService } from '../controllers/productService'
 
 const router = express.Router()
 const config = new Config()
 const stripe = require("stripe")(config.STRIPE_API_KEY)
+const productService = new ProductService()
 
 router.post(EMPTY_PATH,async (req:any,res)  =>{
     try {
-        const products = await getProducts() as Product[]
+        const products = await productService.getAllProducts() as Product[]
         const cartProducts = req.body.cartProducts
         const session = await stripe.checkout.sessions.create({
           payment_method_types: ["card"],

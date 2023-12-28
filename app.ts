@@ -1,13 +1,12 @@
 import Config, { connectDB } from './src/config/config'
-import authRoutes from './src/routes/auth_routes'
-import productRoutes from './src/routes/product_routes'
-import stripeRoutes from './src/routes/stripe_routes'
+import authRoutes from './src/routes/authRoutes'
+import productRoutes from './src/routes/productRoutes'
+import stripeRoutes from './src/routes/stripeRoutes'
 import { AUTH, CHECKOUT, PRODUCTS} from './src/constants/constants'
 import cors from 'cors'
 import logger from './src/logs/logger'
 import passport from 'passport'
 import express from 'express'
-import MongoStore from 'connect-mongo'
 
 const app = express()
 const session = require('express-session')
@@ -44,3 +43,4 @@ app.use(CHECKOUT,stripeRoutes)
 app.listen(PORT,() =>{
     logger.info(`Server is listening on port:${PORT}`)
 })
+export default app

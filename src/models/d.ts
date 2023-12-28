@@ -1,10 +1,10 @@
 export interface Product{
     id: number,
     name: string,
-    description: string[],
+    description: string,
     price: number,
     tags: string[],
-    img_src: string,
+    img_src: string[],
     isDeal: boolean
 }
 
