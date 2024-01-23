@@ -8,7 +8,8 @@ const UserSchema = new Schema<User>({
   name: String,
   email: String,
   password: String,
-  isEmailVerified: Boolean
+  isEmailVerified: Boolean,
+  token: String
 },{collection: 'users'});
 
 // Compile model from schema
