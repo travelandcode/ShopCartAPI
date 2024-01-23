@@ -1,16 +1,19 @@
-import { ProductService } from '../controllers/productService';
+import { ProductService } from '../services/productService';
 import app from '../../app' 
 import { Product } from '../models/d';
 import ProductsModel from '../models/products'
+import mongoose from 'mongoose';
+import Config from '../config/config';
+import { log } from 'winston';
 
 describe('Products Service', () =>{
 
     let productService:any
     let updatedInformation:any
-    let server:any
     let newProduct: Product
 
-    beforeEach(() => {
+    beforeAll(async() => {
+        const config = new Config()
         productService = new ProductService();
         newProduct = {
             id: 111,
@@ -25,13 +28,16 @@ describe('Products Service', () =>{
             description: "This is the new description for Test Product 2",
             price: 777
         }
-        server = app.listen(5000)
-        
+        mongoose.connect(config.MONGODB_URI,{
+            autoIndex: true,
+            dbName: "shopcart"
+        })
     })
 
-    afterEach((done) =>{
-        server.close(done)
+    afterAll(async()=>{
+        await mongoose.connection.close()
     })
+
 
     test('should get all products',async () => {
        const products = await productService.getAllProducts()
@@ -48,31 +54,31 @@ describe('Products Service', () =>{
     })
 
     test('should not create existing product',async () => {
-       const {created} = await productService.addProduct(newProduct)
-       expect(created).toBe(false)
+       const existingProduct = await productService.addProduct(newProduct)
+       expect(existingProduct).toBe(null)
     })
 
     test('should get product using id', async() => {
         const product = await productService.findProductById(newProduct.id)
-        expect(product[0].id).toBe(newProduct.id)
-        expect(product[0].name).toBe(newProduct.name)
-        expect(product[0].price).toBe(newProduct.price)
-        expect(product[0].description).toBe(newProduct.description)
+        expect(product.id).toBe(newProduct.id)
+        expect(product.name).toBe(newProduct.name)
+        expect(product.price).toBe(newProduct.price)
+        expect(product.description).toBe(newProduct.description)
     })
 
     test('should get product using name', async() => {
         const product = await productService.findProductByName(newProduct.name)
-        expect(product[0].id).toBe(newProduct.id)
-        expect(product[0].name).toBe(newProduct.name)
-        expect(product[0].price).toBe(newProduct.price)
-        expect(product[0].description).toBe(newProduct.description)
+        expect(product.id).toBe(newProduct.id)
+        expect(product.name).toBe(newProduct.name)
+        expect(product.price).toBe(newProduct.price)
+        expect(product.description).toBe(newProduct.description)
     })
 
-    test('should update product', async() =>{
+    test('should update product', async () =>{
        const {updatedProduct,updated} = await productService.updateProduct(newProduct.name,updatedInformation)
        expect(updated).toBe(true)
        expect(updatedProduct.description).toBe(updatedInformation.description)
-       expect(updatedProduct.price).toBe(777)
+       expect(updatedProduct.price).toBe(updatedInformation.price)
     })
 
     test('should delete product',async () => {
@@ -82,6 +88,6 @@ describe('Products Service', () =>{
 
     test('should not get any information if product does not exist',async () => {
         const product = await productService.findProductById(newProduct.id)
-        expect(product).toEqual([])
+        expect(product).toEqual(null)
     })
 })
