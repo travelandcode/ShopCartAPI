@@ -1,3 +1,5 @@
+import { OrderStatus } from "./enums"
+
 export interface Product{
     id: number,
     name: string,
@@ -9,11 +11,30 @@ export interface Product{
 }
 
 export interface User{
-    id: string,
+    id: number,
     name: string,
     password: string,
     email: string,
-    isEmailVerified: boolean
+    isEmailVerified: boolean,
+    token: string
+}
+
+
+export interface Order{
+    id: number,
+    userId: number,
+    products: Array<{id: number,quantity: number}>,
+    shipping_address: string,
+    discount: number,
+    status: OrderStatus,
+    deliveryCost: number,
+    subtotal: number,
+    tax: number,
+    total: number,
+    createdAt: string,
+    shippedAt: string,
+    deliveredAt: string,
+    cancelledAt: string
 }
 
 export interface Token{
