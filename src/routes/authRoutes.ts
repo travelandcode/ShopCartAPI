@@ -2,127 +2,32 @@ import express, { NextFunction, Request, Response } from 'express'
 import passport from 'passport'
 import Config from '../config/config'
 import { User } from '../models/d'
-import { compareSync, hashSync } from 'bcrypt'
-import { Strategy as LocalStrategy } from 'passport-local'
-import { Strategy as GoogleStrategy }  from 'passport-google-oauth20'
 import { GOOGLE, GOOGLE_AUTH, GOOGLE_AUTH_REDIRECT, FAILURE, NOT_AUTHENTICATED,
-LOGOUT, EMPTY_USER, SIGN_UP, LOGIN } from '../constants/constants'
+LOGOUT, SIGN_UP, LOGIN } from '../utils/constants'
 import nodemailer from 'nodemailer'
 import logger from '../logs/logger'
 import users from '../models/users'
 import tokens from '../models/tokens'
+import { AuthController } from '../controllers/authController'
+import { UserService } from '../services/userService'
 
 
 const router = express.Router()
+const userService = new UserService()
 const config = new Config()
+const controller = new AuthController({userService})
 
-//Configure Local Strategy
-passport.use(new LocalStrategy(
-    {usernameField: 'email',
-    passwordField: 'password'},
-    async function (email,password, done) {
-        try{
-            const user = await users.findOne({email: email})
-            if(!user) return done(null, false, {message: "Incorrect Email"})
-            if(!compareSync(password,user.password!)) return done(null, false,{message: "Incorrect Password"})
-            return done(null,user)        
-        }catch(error){
-            logger.error(error)
-        }
-    }
-))
+router.post(SIGN_UP, controller.signUp)
 
-//Configure Google Strategy
-passport.use(new GoogleStrategy(
-    {
-        clientID: config.GOOGLE_CLIENT_ID,
-        clientSecret: config.GOOGLE_CLIENT_SECRET,
-        callbackURL: config.GOOGLE_CALLBACK_URL,
-        scope: ['profile','email']
-    },
-    async function(accessToken,refreshToken,profile,done) {
-        try{
-            let user:any = await users.findOne({email: profile.emails![0].value})
-            if(!user){
-                user = new users({
-                    id: profile.id,
-                    name: profile.name!.givenName,
-                    email: profile.emails![0].value,
-                    isEmailVerified: profile._json.email_verified,
-                    password: ''
-                })
-                await user.save().then(()=>{logger.info('New User Created'
-                )})  
-            }
-            logger.info(user)
-            return done(null,user!)
-        }catch(error){
-            logger.error(error)
-        }
-    }
-))
+router.post(LOGIN, passport.authenticate("local",{successRedirect: "/auth/success", failureRedirect: "/auth/failure"}))
 
-//Passport Session Setup
-passport.serializeUser(function(user:any,done){
-    done(null, user)
-})
+router.get(GOOGLE_AUTH, passport.authenticate("google",{scope: ['profile','email']}) )
 
-passport.deserializeUser(async function(user:any,done:any){
-   await users.findOne({ email: user.email })
-  .then((serializedUser) => {
-    // Handle the user data here
-    done(null, serializedUser);
-  })
-  .catch((err) => {
-    // Handle errors here
-    done(err, null);
-  })
-})
+router.get(GOOGLE_AUTH_REDIRECT, passport.authenticate("google",{successRedirect: "/auth/success", failureRedirect: "/auth/failure"}) )
 
-router.post(SIGN_UP, async (req,res) => {
-    const generatedNumber = Math.floor(Math.random()* (999 - 100 + 1) + 100)
-    const newId = generatedNumber+''+Date.now()
-    const existingUser = await users.findOne({email: req.body.email})
-    if(existingUser){
-        res.send('User already exists')
-    }
-    else{
-        const user = new users({
-            id: newId,
-            name: req.body.name,
-            password: hashSync(req.body.password, 10),
-            email: req.body.email,
-            isEmailVerified: false
-        })
-        user.save().then(user => logger.info(user));
-        const { formattedCurrentDay, formattedNextDay } = getFormattedDates()
-        const generatedToken = generateToken()
-        const userTokenInfo = new tokens({ //tokens for email verification
-            userId: user.id,
-            token: generatedToken,
-            createdAt: formattedCurrentDay,
-            expiresAt: formattedNextDay
-        })
-        userTokenInfo.save()
-        sendVerificationEmail(user,generatedToken)
-        logger.info('Registering User')
-        res.status(201).send('Please check your email for verification.')
-    }
-})
+router.get("/success", controller.successfulLogin )
 
-//Routes for Local Authentication
-router.post("/login", passport.authenticate("local",{successRedirect: "http://localhost:3001/auth/success"}))
-
-//Routes for Google Authentication
-router.get(GOOGLE_AUTH, passport.authenticate(GOOGLE,{scope: ['profile','email']}))
-
-router.get(GOOGLE_AUTH_REDIRECT, passport.authenticate(GOOGLE, 
-        {
-            failureRedirect: FAILURE,
-            successRedirect: "/auth/success"
-        }
-    )
-)
+router.get(FAILURE, controller.failedLogin )
 
 async function verificationEmailCheck(req:Request,res:Response, next:NextFunction){
     try{
@@ -154,20 +59,6 @@ async function verificationEmailCheck(req:Request,res:Response, next:NextFunctio
     }
 }
 
-//Route for if login was succesful
-router.get("/success",verificationEmailCheck, (req:any,res) =>{
-    if (req.isAuthenticated()) {
-        res.redirect('http://localhost:3000/')
-    } else {
-        logger.warn('User was not authenticated')
-        res.send(NOT_AUTHENTICATED)
-    }
-})
-
-router.get(FAILURE, (req,res) =>{
-    logger.info('Login attempt failed')
-    res.redirect(config.DOMAIN)
-})
 
 router.post(LOGOUT, (req,res) =>{
     logger.info('Logging out user')
@@ -211,7 +102,7 @@ router.get('/user', authenticateUser, (req, res) => {
     res.status(201).send({user: req.user})
 })
 
-async function sendVerificationEmail(newUser:User, token: String){
+async function sendVerificationEmail(newUser:User, token: string){
     const transporter = nodemailer.createTransport({
         service: 'gmail',
         auth: {
