@@ -7,7 +7,6 @@ export class UserService{
         this.findUser = this.findUser.bind(this)
         this.createUser = this.createUser.bind(this)
         this.editUser = this.editUser.bind(this)
-        this.editUser = this.editUser.bind(this)
         this.deleteUser = this.deleteUser.bind(this)
     }
 

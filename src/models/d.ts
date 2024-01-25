@@ -10,6 +10,11 @@ export interface Product{
     isDeal: boolean
 }
 
+export interface CartProduct{
+    id: number,
+    quantity: number
+}
+
 export interface User{
     id: number,
     name: string,
