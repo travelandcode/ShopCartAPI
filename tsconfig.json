@@ -4,13 +4,13 @@
     "module": "CommonJS",
     "strict": true,
     "esModuleInterop": true,
+    "outDir": "dist",
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
-    "baseUrl": ".",
-    "paths": {
-      "shopcart-api/*": ["src/*"]
-    }
-  }
+    "baseUrl": "."
+  },
+  "include": ["src/**/*.ts"],
+  "exclude": ["node_modules"]
 }
 
 

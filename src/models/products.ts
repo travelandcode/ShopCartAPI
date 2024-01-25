@@ -1,9 +1,9 @@
-import mongoose, { Collection } from "mongoose";
-import { Products } from "./d";
+import mongoose from "mongoose";
+import { Product } from "./d";
 // Define schema
 const Schema = mongoose.Schema;
 
-const ProductSchema = new Schema<Products>({
+const ProductSchema = new Schema<Product>({
     id: Number,
     name: String,
     description: String,
@@ -15,6 +15,6 @@ const ProductSchema = new Schema<Products>({
 },{collection: 'products'});
 
 // Compile model from schema
-const products = mongoose.model<Products>('products', ProductSchema);
+const products = mongoose.model<Product>('products', ProductSchema);
 
 export default products;

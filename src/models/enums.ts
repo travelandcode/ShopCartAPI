@@ -1,6 +1,6 @@
-export enum UserType {
-    GOOGLE = 'GOOGLE',
-    TWITTER = 'TWITTER',
-    FACEBOOK = 'FACEBOOK',
-    MICROSOFT = 'MICROSOFT'
+export enum OrderStatus {
+    ORDER_PLACED = 'Order Placed',
+    SHIPPED = 'Shipped',
+    DELIVERED = 'Delivered',
+    CANCELLED = 'Cancelled'
 }
