@@ -22,10 +22,10 @@ connectDB();
 
 app.use(cors(
   {
-    origin: DOMAIN,
-    methods: ['GET', 'POST', 'OPTIONS', 'PUT', 'PATCH', 'DELETE'],
+    origin: '*',
+    methods: "GET,POST,OPTIONS,PUT,PATCH,DELETE",
     credentials: true,
-    exposedHeaders: ['access-control-allow-credentials','Content-Type','Authorization'],
+    allowedHeaders: "X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version"
   }
 ))
 
