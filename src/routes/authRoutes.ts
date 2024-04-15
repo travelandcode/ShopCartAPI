@@ -85,7 +85,7 @@ function authenticateUser(req:Request, res:Response, next:NextFunction){
     res.status(401).send('Unauthorized')
 }
 
-router.get('/user', authenticateUser, (req, res) => {
+router.get('/user', (req, res) => {
     res.status(200).send({user: req.user})
 })
 
