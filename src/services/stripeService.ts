@@ -57,7 +57,7 @@ export class StripeService {
                 },
                 line_items: storeProducts, 
                 success_url: `${domain}/success?session={CHECKOUT_SESSION_ID}`,
-                cancel_url: 'http://localhost:3000/',
+                cancel_url: `${domain}/home`,
           
             })
             return session
