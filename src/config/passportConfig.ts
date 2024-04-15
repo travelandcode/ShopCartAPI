@@ -5,6 +5,7 @@ import logger from '../logs/logger'
 import Config from './config'
 import { UserService } from '../services/userService'
 import { User } from '../models/d'
+import passport from 'passport'
 
 const config = new Config()
 const _userService = new UserService()
@@ -39,10 +40,10 @@ export const GoogleStrategy = new PassportGoogleStrategy(
                 email: profile.emails![0].value,
                 isEmailVerified: Boolean(profile._json.email_verified),
                 token: 'fkjfjfkdjfdf',
-                password: ''
+                password: 'password'
             } 
             const existingUser = await _userService.findUser(user.email)
-            !existingUser ? await _userService.createUser(user) : logger.info("User already exists")
+            if(!existingUser) await _userService.createUser(user) 
             return done(null,user)
         }catch(error){
             logger.error(error)
@@ -50,11 +51,11 @@ export const GoogleStrategy = new PassportGoogleStrategy(
     }
 )
 
-export function serializeUser(user:any,done:any) {
+export function serializeUser(user:Express.User,done:passport.DoneCallback) {
     done(null,user)    
 }
 
-export async function deserializeUser(user:any,done:any){
+export async function deserializeUser(user:User,done:passport.DoneCallback){
     try {
         const serializedUser = await _userService.findUser(user.email)
         if(serializedUser) return done(null, serializedUser)
