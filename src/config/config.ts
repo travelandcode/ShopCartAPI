@@ -22,12 +22,12 @@ export function connectDB():void {
       autoIndex: true,
       dbName: "shopcart"
     });
-  } catch (err:any) {
-    logger.error(err.message);
+  } catch (error) {
+    logger.error(error);
     process.exit(1);
   }
   const dbConnection = mongoose.connection;
-  dbConnection.once("open", (_) => {
+  dbConnection.once("open", () => {
     logger.info(`Successfully Connected to Database`);
   });
 

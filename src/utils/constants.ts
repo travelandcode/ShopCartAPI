@@ -10,6 +10,8 @@ export const FAILURE = '/failure'
 
 export const LOGOUT = '/logout'
 
+export const SUCCESS = '/success'
+
 export const GOOGLE_AUTH = '/google'
 
 export const GOOGLE_AUTH_REDIRECT = '/google/redirect'

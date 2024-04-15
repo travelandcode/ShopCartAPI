@@ -34,26 +34,36 @@ export class AuthController{
         }
     }
 
-    successfulLogin = (req: Request, res: Response) => {
-        const user:any = req.user
+    successfulLocalLogin = (req: Request, res: Response) => {
+        const user = req.user as User
         if (req.isAuthenticated()) {
             if(user.password === "") return res.status(403).send({user:user, message:"Please Enter Password For User"})
             logger.info("Login Attempt was successful")
-            res.status(200).send({user:user, message:"Successful Login"})
+            res.status(200).send({user:user, message:"Successful Login"}) 
+        }
+    }
+
+    successfulGoogleLogin = (req: Request, res: Response) => {
+        const user = req.user as User
+        if (req.isAuthenticated()) {
+            if(user.password === "") return res.status(403).send({user:user, message:"Please Enter Password For User"})
+            logger.info("Login Attempt was successful")
+            res.redirect('http://localhost:3000/home') 
         }
     }
 
     failedLogin = (req:Request, res:Response) => {
         logger.info("Login Attempt Failed")
-        res.status(401).send("Login Attempt Failed")
+        res.status(401).send({message:"Login Attempt Failed"})
     }
 
     logout = (req: Request, res: Response) => {
+        const user = req.user as User
+        logger.info(`${user.name} logged out`)
         req.logout(() => {
-            logger.info("User Logged Out")
-            res.send(200).send("Logged Out User")
-        })
+                res.status(200).send('Logged Out')
+            }
+        )
     }
-
 
 }

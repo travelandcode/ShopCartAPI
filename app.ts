@@ -9,6 +9,7 @@ import logger from './src/logs/logger'
 import passport from 'passport'
 import express from 'express'
 import session from 'express-session'
+import MongoStore from 'connect-mongo'
 import { GoogleStrategy, LocalStrategy, deserializeUser, serializeUser } from './src/config/passportConfig'
 
 const app = express()
@@ -24,12 +25,18 @@ app.use(cors(
     origin: DOMAIN,
     methods: ['GET', 'POST', 'OPTIONS', 'PUT', 'PATCH', 'DELETE'],
     credentials: true,
-    exposedHeaders: ['access-control-allow-credentials']
+    exposedHeaders: ['access-control-allow-credentials','Content-Type','Authorization'],
   }
 ))
 
 //Express setup
-app.use(session({secret: config.SESSION_SECRET, resave: true, saveUninitialized: true, cookie: { maxAge: 30 * 24 * 60 * 60 *1000}}))
+app.use(session({
+  secret: config.SESSION_SECRET, 
+  resave: false, 
+  saveUninitialized: false, 
+  store: MongoStore.create({mongoUrl: config.MONGODB_URI, dbName: 'shopcart', collectionName: 'mySessions'}),
+  cookie: { secure: false, maxAge: 30 * 24 * 60 * 60 *1000}}
+))
 app.use(express.json())
 app.use(express.urlencoded({extended:true}))
 

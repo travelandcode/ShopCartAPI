@@ -2,8 +2,7 @@ import express, { NextFunction, Request, Response } from 'express'
 import passport from 'passport'
 import Config from '../config/config'
 import { User } from '../models/d'
-import { GOOGLE, GOOGLE_AUTH, GOOGLE_AUTH_REDIRECT, FAILURE, NOT_AUTHENTICATED,
-LOGOUT, SIGN_UP, LOGIN } from '../utils/constants'
+import { GOOGLE_AUTH, GOOGLE_AUTH_REDIRECT, FAILURE, LOGOUT, SIGN_UP, LOGIN, GOOGLE_AUTH_SUCCESS, SUCCESS} from '../utils/constants'
 import nodemailer from 'nodemailer'
 import logger from '../logs/logger'
 import users from '../models/users'
@@ -23,11 +22,15 @@ router.post(LOGIN, passport.authenticate("local",{successRedirect: "/auth/succes
 
 router.get(GOOGLE_AUTH, passport.authenticate("google",{scope: ['profile','email']}) )
 
-router.get(GOOGLE_AUTH_REDIRECT, passport.authenticate("google",{successRedirect: "/auth/success", failureRedirect: "/auth/failure"}) )
+router.get(GOOGLE_AUTH_REDIRECT, passport.authenticate("google",{successRedirect: "/auth/google/success", failureRedirect: "/auth/failure"}) )
 
-router.get("/success", controller.successfulLogin )
+router.get(GOOGLE_AUTH_SUCCESS, controller.successfulGoogleLogin)
+
+router.get(SUCCESS, controller.successfulLocalLogin )
 
 router.get(FAILURE, controller.failedLogin )
+
+router.get(LOGOUT, controller.logout)
 
 async function verificationEmailCheck(req:Request,res:Response, next:NextFunction){
     try{
@@ -59,22 +62,6 @@ async function verificationEmailCheck(req:Request,res:Response, next:NextFunctio
     }
 }
 
-
-router.post(LOGOUT, (req,res) =>{
-    logger.info('Logging out user')
-    req.logout(() => {
-        res.redirect(config.DOMAIN)
-        }
-    );
-})
-
-router.get('/logout',(req,res)=> {
-    req.logout(() =>{
-        console.log(req.session)
-        res.redirect('http://localhost:3001/auth/login')
-    })
-})
-
 router.get('/verify', async (req, res) => {
     const  { userToken, userId } = req.query;
     logger.info(userId)
@@ -99,7 +86,7 @@ function authenticateUser(req:Request, res:Response, next:NextFunction){
 }
 
 router.get('/user', authenticateUser, (req, res) => {
-    res.status(201).send({user: req.user})
+    res.status(200).send({user: req.user})
 })
 
 async function sendVerificationEmail(newUser:User, token: string){
