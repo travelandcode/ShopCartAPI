@@ -55,5 +55,3 @@ To use the ShopCart API, follow these simple steps:
     ```
 
 The API should now be up and running on your local machine, and you can start sending requests to it.
-
-TEST PUSH
