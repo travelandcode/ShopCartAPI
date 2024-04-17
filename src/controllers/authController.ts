@@ -4,7 +4,7 @@ import { User } from "../models/d";
 import { Calculations } from "../utils/calculations";
 import { UserService } from "../services/userService";
 import { hashSync } from "bcrypt";
-import Config from "src/config/config";
+import Config from "../config/config";
 
 export class AuthController{
     private _userService: UserService
