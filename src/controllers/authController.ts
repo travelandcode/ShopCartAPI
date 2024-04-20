@@ -4,10 +4,12 @@ import { User } from "../models/d";
 import { Calculations } from "../utils/calculations";
 import { UserService } from "../services/userService";
 import { hashSync } from "bcrypt";
+import Config from "../config/config";
 
 export class AuthController{
     private _userService: UserService
     private calculations = new Calculations()
+    private config = new Config()
 
     constructor({ userService }: { userService: UserService }){
         this._userService = userService
@@ -48,7 +50,7 @@ export class AuthController{
         if (req.isAuthenticated()) {
             if(user.password === "") return res.status(403).send({user:user, message:"Please Enter Password For User"})
             logger.info("Login Attempt was successful")
-            res.redirect('http://localhost:3000/home') 
+            res.redirect(`${this.config.DOMAIN}/home`) 
         }
     }
 

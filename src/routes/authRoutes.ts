@@ -2,7 +2,7 @@ import express, { NextFunction, Request, Response } from 'express'
 import passport from 'passport'
 import Config from '../config/config'
 import { User } from '../models/d'
-import { GOOGLE_AUTH, GOOGLE_AUTH_REDIRECT, FAILURE, LOGOUT, SIGN_UP, LOGIN, GOOGLE_AUTH_SUCCESS, SUCCESS} from '../utils/constants'
+import { GOOGLE_AUTH, GOOGLE_AUTH_REDIRECT, FAILURE, LOGOUT, SIGN_UP, LOGIN, GOOGLE_AUTH_SUCCESS, SUCCESS, AUTH} from '../utils/constants'
 import nodemailer from 'nodemailer'
 import logger from '../logs/logger'
 import users from '../models/users'
@@ -18,11 +18,11 @@ const controller = new AuthController({userService})
 
 router.post(SIGN_UP, controller.signUp)
 
-router.post(LOGIN, passport.authenticate("local",{successRedirect: "/auth/success", failureRedirect: "/auth/failure"}))
+router.post(LOGIN, passport.authenticate("local",{successRedirect: `${AUTH}${SUCCESS}`, failureRedirect: `${AUTH}${FAILURE}`}))
 
 router.get(GOOGLE_AUTH, passport.authenticate("google",{scope: ['profile','email']}) )
 
-router.get(GOOGLE_AUTH_REDIRECT, passport.authenticate("google",{successRedirect: "/auth/google/success", failureRedirect: "/auth/failure"}) )
+router.get(GOOGLE_AUTH_REDIRECT, passport.authenticate("google",{successRedirect: `${AUTH}${GOOGLE_AUTH_SUCCESS}`, failureRedirect: `${AUTH}${FAILURE}`}) )
 
 router.get(GOOGLE_AUTH_SUCCESS, controller.successfulGoogleLogin)
 
