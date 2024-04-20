@@ -25,7 +25,7 @@ app.use(cors(
     origin: DOMAIN,
     methods: ['GET', 'POST', 'OPTIONS', 'PUT', 'PATCH', 'DELETE'],
     credentials: true,
-    exposedHeaders: ['access-control-allow-credentials','Content-Type','Authorization'],
+    allowedHeaders: ['access-control-allow-credentials','Content-Type','Authorization'],
   }
 ))
 
