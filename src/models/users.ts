@@ -1,5 +1,6 @@
-import mongoose from "mongoose";
-import { User } from "./d";
+import mongoose from "mongoose"
+import { User, CartProduct, Order } from "./d"
+import orders from "./orders";
 // Define schema
 const Schema = mongoose.Schema;
 
@@ -9,7 +10,8 @@ const UserSchema = new Schema<User>({
   email: String,
   password: String,
   isEmailVerified: Boolean,
-  token: String
+  orders: [orders],
+  cart: [{id: Number, quantity: Number}]
 },{collection: 'users'});
 
 // Compile model from schema
