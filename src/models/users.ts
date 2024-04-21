@@ -1,6 +1,5 @@
 import mongoose from "mongoose"
-import { User, CartProduct, Order } from "./d"
-import orders from "./orders";
+import { User, Order } from "./d"
 // Define schema
 const Schema = mongoose.Schema;
 
@@ -10,7 +9,7 @@ const UserSchema = new Schema<User>({
   email: String,
   password: String,
   isEmailVerified: Boolean,
-  orders: [orders],
+  orders: Array<Order>,
   cart: [{id: Number, quantity: Number}]
 },{collection: 'users'});
 

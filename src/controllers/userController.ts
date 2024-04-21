@@ -38,7 +38,7 @@ export class UserController{
 
     fetchUser = async (req: Request, res: Response) => {
         try {
-            res.status(200).send({user: req.user})
+            res.status(200).send({data: req.user})
         } catch (error) {
             logger.error(error)
         }
