@@ -39,8 +39,9 @@ export const GoogleStrategy = new PassportGoogleStrategy(
                 name: profile.name!.givenName,
                 email: profile.emails![0].value,
                 isEmailVerified: Boolean(profile._json.email_verified),
-                token: 'fkjfjfkdjfdf',
-                password: 'password'
+                password: "password",
+                orders: [],
+                cart: []
             } 
             const existingUser = await _userService.findUser(user.email)
             if(!existingUser) await _userService.createUser(user) 
