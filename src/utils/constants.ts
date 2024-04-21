@@ -22,7 +22,7 @@ export const GOOGLE = 'google'
 
 export const NOT_AUTHENTICATED = 'Not Authenticated'
 
-export const  AUTH_USER = '/user'
+export const  USER = '/user'
 
 export const AUTH = '/auth'
 
