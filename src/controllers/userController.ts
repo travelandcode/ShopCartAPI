@@ -49,7 +49,7 @@ export class UserController{
             const user =  req.user as User
             const userCart = await this._userService.findUser(user.email) as User
             if(!userCart) res.status(404).send("Could not find user")
-            logger.info(`Successfully fetched ${userCart.name}'s cart`)
+            logger.info(`${userCart.name}'s cart was fetched successfully`)
             res.status(200).send({data:userCart.cart})
         } catch (error) {
             logger.error(error)
@@ -58,7 +58,8 @@ export class UserController{
 
     updateCart = async (req: Request, res: Response) => {
         try {
-            const updatedUserCart: User = await this._userService.updateCart(req.body.email,req.body.cartProducts) as User
+            const user = req.user as User
+            const updatedUserCart: User = await this._userService.updateCart(user.email,req.body.cartProducts) as User
             if(!updatedUserCart) res.status(404).send("User was not created")
             logger.info(`${updatedUserCart.name}'s cart was updated`)
             res.status(200).send({data:updatedUserCart.cart})

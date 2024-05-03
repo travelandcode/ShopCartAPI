@@ -10,8 +10,8 @@ router.get("/",controller.authenticateUser,controller.fetchUser)
 
 router.post("/update", controller.editUser)
 
-router.get("/cart", controller.fetchCart)
+router.get("/cart",controller.authenticateUser, controller.fetchCart)
 
-router.get("/cart/update", controller.updateCart)
+router.post("/cart/update",controller.authenticateUser, controller.updateCart)
 
 export default router
