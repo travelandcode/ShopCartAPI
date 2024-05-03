@@ -33,8 +33,8 @@ app.use(cors(
 //Express setup
 app.use(session({
   secret: config.SESSION_SECRET, 
-  resave: false, 
-  saveUninitialized: false, 
+  resave: true, 
+  saveUninitialized: true, 
   store: MongoStore.create({mongoUrl: config.MONGODB_URI, dbName: 'shopcart', collectionName: 'mySessions'}),
   cookie: { secure: false, maxAge: 30 * 24 * 60 * 60 *1000}}
 ))
