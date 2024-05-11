@@ -35,7 +35,7 @@ app.use(session({
   resave: false, 
   saveUninitialized: false, 
   store: MongoStore.create({mongoUrl: config.MONGODB_URI, dbName: 'shopcart', collectionName: 'mySessions'}),
-  cookie: { secure: false, maxAge: 30 * 24 * 60 * 60 *1000}}
+  cookie: { secure: config.NODE_ENV === 'PRODUCTION', maxAge: 30 * 24 * 60 * 60 *1000}}
 ))
 app.use(express.json())
 app.use(express.urlencoded({extended:true}))

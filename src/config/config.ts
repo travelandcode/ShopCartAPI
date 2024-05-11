@@ -13,6 +13,7 @@ export default class Config{
     MONGODB_URI = process.env.MONGODB_URI || ''
     STRIPE_API_KEY = process.env.STRIPE_API_KEY || ''
     SESSION_SECRET = process.env.SESSION_SECRET || ''
+    NODE_ENV = process.env.NODE_ENV || 'DEVELOPMENT'
 }
 
 export function connectDB():void {
