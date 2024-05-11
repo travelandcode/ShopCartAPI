@@ -25,7 +25,8 @@ export class AuthController{
                 password: hashSync(req.body.password, 10),
                 email: req.body.email,
                 isEmailVerified: false,
-                token: this.calculations.generateToken()
+                orders: [],
+                cart: []
             }
             const newUser = await this._userService.createUser(user)
             if(!newUser) return res.status(409).send("User already exists")
@@ -39,7 +40,7 @@ export class AuthController{
     successfulLocalLogin = (req: Request, res: Response) => {
         const user = req.user as User
         if (req.isAuthenticated()) {
-            if(user.password === "") return res.status(403).send({user:user, message:"Please Enter Password For User"})
+            if(user.password === "") return res.status(403).send({data:user, message:"Please Enter Password For User"})
             logger.info("Login Attempt was successful")
             res.status(200).send({user:user, message:"Successful Login"}) 
         }
@@ -48,7 +49,7 @@ export class AuthController{
     successfulGoogleLogin = (req: Request, res: Response) => {
         const user = req.user as User
         if (req.isAuthenticated()) {
-            if(user.password === "") return res.status(403).send({user:user, message:"Please Enter Password For User"})
+            if(user.password === "") return res.status(403).send({data:user, message:"Please Enter Password For User"})
             logger.info("Login Attempt was successful")
             res.redirect(`${this.config.DOMAIN}/home`) 
         }
