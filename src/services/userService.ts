@@ -1,5 +1,5 @@
 import logger from '../logs/logger';
-import { User } from '../models/d'
+import { CartProduct, User } from '../models/d'
 import UsersModel from '../models/users'
 
 export class UserService{
@@ -30,9 +30,9 @@ export class UserService{
         }
     }
 
-    async editUser(user:User){
+    async editUser(email:string,user:User){
         try{
-            const existingUser = await this.findUser(user.email)
+            const existingUser = await this.findUser(email)
             if(!existingUser) return null
             const editedUser = await UsersModel.findOneAndUpdate({email:existingUser.email},{$set: {user}},{new:true})
             return editedUser
@@ -47,6 +47,17 @@ export class UserService{
             if(!existingUser) return null
             const deletedUser = await UsersModel.findOneAndDelete({email:existingUser.email})
             return deletedUser
+        }catch(error){
+            logger.error(error)
+        }
+    }
+
+    async updateCart(email:string, userCart: CartProduct[]){
+        try{
+            const existingUser: User = await this.findUser(email) as User
+            if(!existingUser) return null
+            const updatedUser: User = await UsersModel.findOneAndUpdate({email:existingUser.email},{cart: userCart}) as User
+            return updatedUser
         }catch(error){
             logger.error(error)
         }

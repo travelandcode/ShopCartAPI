@@ -78,17 +78,6 @@ router.get('/verify', async (req, res) => {
     return res.status(400).send('Invalid verification token.');
 }); 
 
-function authenticateUser(req:Request, res:Response, next:NextFunction){
-    if(req.isAuthenticated()){
-        return next()
-    }
-    res.status(401).send('Unauthorized')
-}
-
-router.get('/user', authenticateUser, (req, res) => {
-    res.status(200).send({user: req.user})
-})
-
 async function sendVerificationEmail(newUser:User, token: string){
     const transporter = nodemailer.createTransport({
         service: 'gmail',

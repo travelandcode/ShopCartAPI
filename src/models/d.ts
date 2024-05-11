@@ -21,14 +21,15 @@ export interface User{
     password: string,
     email: string,
     isEmailVerified: boolean,
-    token: string
+    orders: Order[],
+    cart: CartProduct[]
 }
 
 
 export interface Order{
     id: number,
     userId: number,
-    products: Array<{id: number,quantity: number}>,
+    products: CartProduct[],
     shipping_address: string,
     discount: number,
     status: OrderStatus,
