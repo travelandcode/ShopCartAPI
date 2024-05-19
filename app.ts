@@ -24,9 +24,9 @@ connectDB();
 app.use(cors(
   {
     origin: DOMAIN,
-    methods: ['GET', 'POST', 'OPTIONS', 'PUT', 'PATCH', 'DELETE'],
+    methods: 'GET, POST, OPTIONS, PUT, PATCH, DELETE',
     credentials: true,
-    allowedHeaders: ['Content-Type','Authorization'],
+    allowedHeaders: 'Content-Type, Authorization',
   }
 ))
 
