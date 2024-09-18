@@ -48,6 +48,11 @@ export class AuthController{
 
     successfulGoogleLogin = (req: Request, res: Response) => {
         const user = req.user as User
+        if (!this.config.DOMAIN) {
+            logger.error("DOMAIN is not set in the environment variables.");
+            return res.status(500).send("Server configuration error.");
+        }
+        
         if (req.isAuthenticated()) {
             logger.info("Successfully authenticated user.")
             //if(user.password === "") return res.status(403).send({data:user, message:"Please Enter Password For User"})
