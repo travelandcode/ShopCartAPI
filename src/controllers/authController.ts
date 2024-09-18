@@ -49,6 +49,7 @@ export class AuthController{
     successfulGoogleLogin = (req: Request, res: Response) => {
         const user = req.user as User
         if (req.isAuthenticated()) {
+            logger.info("Successfully authenticated user.")
             //if(user.password === "") return res.status(403).send({data:user, message:"Please Enter Password For User"})
             logger.info("Login Attempt was successful")
             res.redirect(`${this.config.DOMAIN}/home`) 
